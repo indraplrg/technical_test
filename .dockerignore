@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+logs/
+tmp/
+Dockerfile
+docker-compose.yml
+Makefile
+k8s/
+scripts/
+*.md

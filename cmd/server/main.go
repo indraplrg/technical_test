@@ -53,6 +53,9 @@ func main() {
 	if err := database.RunMigrations(db, &model.Jurusan{}, &model.Mahasiswa{}); err != nil {
 		log.Fatalf("failed to run migrations: %v", err)
 	}
+	if err := database.Seed(db); err != nil {
+		log.Fatalf("failed to seed data: %v", err)
+	}
 
 	router := routes.Setup(cfg, db)
 
