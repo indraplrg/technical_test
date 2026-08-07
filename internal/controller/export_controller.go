@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"time"
@@ -163,6 +164,35 @@ func (ctr *ExportController) ExportPDF(c *gin.Context) {
 
 	if err := pdf.Output(c.Writer); err != nil {
 		response.Error(c, http.StatusInternalServerError, "failed to generate pdf file")
+	}
+}
+
+// ExportJSON handles GET /api/v1/mahasiswa/export/json.
+func (ctr *ExportController) ExportJSON(c *gin.Context) {
+	list, err := ctr.service.ExportAll(c.Request.Context(), ctr.buildQuery(c))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+
+	payload := response.Result{
+		Success: true,
+		Message: "mahasiswa exported successfully",
+		Data:    list,
+	}
+
+	raw, err := json.MarshalIndent(payload, "", "  ")
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, "failed to marshal json")
+		return
+	}
+
+	filename := "mahasiswa_" + time.Now().UTC().Format("20060102150405") + ".json"
+	c.Header("Content-Type", "application/json; charset=utf-8")
+	c.Header("Content-Disposition", "attachment; filename="+filename)
+	c.Writer.WriteHeader(http.StatusOK)
+	if _, err := c.Writer.Write(raw); err != nil {
+		response.Error(c, http.StatusInternalServerError, "failed to write json file")
 	}
 }
 
