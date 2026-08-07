@@ -54,7 +54,7 @@ func (ctr *ExportController) ExportCSV(c *gin.Context) {
 			m.NIM,
 			m.TanggalLahir,
 			m.Alamat,
-			strconv.FormatUint(uint64(m.IDJurusan), 10),
+			strconv.FormatUint(uint64(m.JurusanID), 10),
 			jurusan,
 		})
 	}
@@ -94,7 +94,7 @@ func (ctr *ExportController) ExportExcel(c *gin.Context) {
 			m.NIM,
 			m.TanggalLahir,
 			m.Alamat,
-			m.IDJurusan,
+			m.JurusanID,
 			jurusan,
 		}
 		for i, value := range values {

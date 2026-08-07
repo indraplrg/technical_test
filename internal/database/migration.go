@@ -2,9 +2,11 @@ package database
 
 import "gorm.io/gorm"
 
-// RunMigrations applies schema migrations for the given models.
-// Models are registered incrementally, so callers pass the entities
-// that should be migrated.
+// RunMigrations applies schema migrations for the given models and then
+// ensures the explicit foreign key constraints exist.
 func RunMigrations(db *gorm.DB, values ...interface{}) error {
-	return db.AutoMigrate(values...)
+	if err := db.AutoMigrate(values...); err != nil {
+		return err
+	}
+	return ApplyConstraints(db)
 }

@@ -35,7 +35,7 @@ func (s *mahasiswaService) Create(ctx context.Context, req dto.MahasiswaRequest)
 	if err := validateDateFormat(req.TanggalLahir); err != nil {
 		return nil, err
 	}
-	if err := s.ensureJurusanExists(ctx, req.IDJurusan); err != nil {
+	if err := s.ensureJurusanExists(ctx, req.JurusanID); err != nil {
 		return nil, err
 	}
 	if err := s.ensureNIMUnique(ctx, req.NIM, 0); err != nil {
@@ -48,7 +48,7 @@ func (s *mahasiswaService) Create(ctx context.Context, req dto.MahasiswaRequest)
 		NIM:          strings.TrimSpace(req.NIM),
 		TanggalLahir: req.TanggalLahir,
 		Alamat:       strings.TrimSpace(req.Alamat),
-		IDJurusan:    req.IDJurusan,
+		JurusanID:    req.JurusanID,
 	}
 	if err := s.mahasiswaRepo.Create(ctx, mahasiswa); err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (s *mahasiswaService) Update(ctx context.Context, id uint, req dto.Mahasisw
 	if err != nil {
 		return nil, err
 	}
-	if err := s.ensureJurusanExists(ctx, req.IDJurusan); err != nil {
+	if err := s.ensureJurusanExists(ctx, req.JurusanID); err != nil {
 		return nil, err
 	}
 	if err := s.ensureNIMUnique(ctx, req.NIM, id); err != nil {
@@ -109,7 +109,7 @@ func (s *mahasiswaService) Update(ctx context.Context, id uint, req dto.Mahasisw
 	mahasiswa.NIM = strings.TrimSpace(req.NIM)
 	mahasiswa.TanggalLahir = req.TanggalLahir
 	mahasiswa.Alamat = strings.TrimSpace(req.Alamat)
-	mahasiswa.IDJurusan = req.IDJurusan
+	mahasiswa.JurusanID = req.JurusanID
 
 	if err := s.mahasiswaRepo.Update(ctx, mahasiswa); err != nil {
 		return nil, err
@@ -147,9 +147,13 @@ func (s *mahasiswaService) ensureJurusanExists(ctx context.Context, id uint) err
 
 func (s *mahasiswaService) ensureNIMUnique(ctx context.Context, nim string, excludeID uint) error {
 	existing, err := s.mahasiswaRepo.FindByNIM(ctx, strings.TrimSpace(nim), excludeID)
-	if err != nil && !errors.Is(err, repository.ErrRecordNotFound) {
+	if err != nil {
+		if errors.Is(err, repository.ErrRecordNotFound) {
+			return nil
+		}
 		return err
 	}
+	// A conflict exists when another record owns the NIM.
 	if existing != nil && existing.ID != excludeID {
 		return ErrDuplicateNIM
 	}

@@ -7,5 +7,5 @@ type MahasiswaRequest struct {
 	NIM          string `json:"nim" binding:"required"`
 	TanggalLahir string `json:"tanggal_lahir" binding:"required,date"`
 	Alamat       string `json:"alamat" binding:"required"`
-	IDJurusan    uint   `json:"id_jurusan" binding:"required"`
+	JurusanID    uint   `json:"id_jurusan" binding:"required"`
 }
