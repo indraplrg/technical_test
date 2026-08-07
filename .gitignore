@@ -37,3 +37,7 @@ logs/
 
 # Temporary
 tmp/
+
+additionalRequirement.txt
+context.txt
+gitPlan.txt
