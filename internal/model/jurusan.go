@@ -8,7 +8,7 @@ import (
 
 // Jurusan represents an academic department. One Jurusan has many Mahasiswa.
 type Jurusan struct {
-ID        uint           `gorm:"column:id_jurusan;primaryKey" json:"id_jurusan"`
+	ID          uint   `gorm:"column:id_jurusan;primaryKey" json:"id_jurusan"`
 	NamaJurusan string `gorm:"size:100;not null" json:"nama_jurusan"`
 	Fakultas    string `gorm:"size:100;not null" json:"fakultas"`
 	Jenjang     string `gorm:"size:50;not null" json:"jenjang"`
