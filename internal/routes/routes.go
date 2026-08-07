@@ -25,6 +25,9 @@ func Setup(cfg *config.Config, db *gorm.DB) *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := router.Group("/api/v1")
+	if cfg.RateLimitEnabled {
+		v1.Use(middleware.NewRateLimiter(cfg.RateLimitRPS, cfg.RateLimitBurst).Middleware())
+	}
 	{
 		jurusanController := newJurusanController(db)
 		jurusanRoutes := v1.Group("/jurusan")

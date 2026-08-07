@@ -42,7 +42,7 @@ func (r *jurusanRepository) Update(ctx context.Context, jurusan *model.Jurusan) 
 }
 
 func (r *jurusanRepository) Delete(ctx context.Context, id uint) error {
-	return r.db.WithContext(ctx).Delete(&model.Jurusan{}, id).Error
+	return r.db.WithContext(ctx).Unscoped().Delete(&model.Jurusan{}, id).Error
 }
 
 func (r *jurusanRepository) ExistsByID(ctx context.Context, id uint) (bool, error) {

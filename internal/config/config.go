@@ -22,6 +22,12 @@ type Config struct {
 	ReadTimeout   int
 	WriteTimeout  int
 	IdleTimeout   int
+	// RateLimitEnabled toggles the per-client rate limiter.
+	RateLimitEnabled bool
+	// RateLimitRPS is the sustained requests-per-second budget per client.
+	RateLimitRPS float64
+	// RateLimitBurst is the maximum request burst allowed per client.
+	RateLimitBurst int
 }
 
 func Load(paths ...string) *Config {
@@ -42,6 +48,9 @@ func Load(paths ...string) *Config {
 		ReadTimeout:   getEnvInt("READ_TIMEOUT", 10),
 		WriteTimeout:  getEnvInt("WRITE_TIMEOUT", 10),
 		IdleTimeout:   getEnvInt("IDLE_TIMEOUT", 60),
+		RateLimitEnabled: getEnvBool("RATE_LIMIT_ENABLED", true),
+		RateLimitRPS:     getEnvFloat("RATE_LIMIT_RPS", 10),
+		RateLimitBurst:   getEnvInt("RATE_LIMIT_BURST", 20),
 	}
 }
 
@@ -58,6 +67,30 @@ func getEnvInt(key string, fallback int) int {
 		return fallback
 	}
 	parsed, err := strconv.Atoi(value)
+	if err != nil {
+		return fallback
+	}
+	return parsed
+}
+
+func getEnvBool(key string, fallback bool) bool {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback
+	}
+	parsed, err := strconv.ParseBool(value)
+	if err != nil {
+		return fallback
+	}
+	return parsed
+}
+
+func getEnvFloat(key string, fallback float64) float64 {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback
+	}
+	parsed, err := strconv.ParseFloat(value, 64)
 	if err != nil {
 		return fallback
 	}

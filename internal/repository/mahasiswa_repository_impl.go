@@ -75,7 +75,7 @@ func (r *mahasiswaRepository) Update(ctx context.Context, mahasiswa *model.Mahas
 }
 
 func (r *mahasiswaRepository) Delete(ctx context.Context, id uint) error {
-	return r.db.WithContext(ctx).Delete(&model.Mahasiswa{}, id).Error
+	return r.db.WithContext(ctx).Unscoped().Delete(&model.Mahasiswa{}, id).Error
 }
 
 func (r *mahasiswaRepository) FindAllExport(ctx context.Context, filter MahasiswaFilter) ([]model.Mahasiswa, error) {

@@ -153,7 +153,7 @@ func (ctr *MahasiswaController) Update(c *gin.Context) {
 
 // Delete handles DELETE /api/v1/mahasiswa/:id.
 // @Summary Delete mahasiswa
-// @Description Delete a mahasiswa record (soft delete)
+// @Description Delete a mahasiswa record permanently (hard delete)
 // @Tags mahasiswa
 // @Produce json
 // @Param id path int true "Mahasiswa ID"

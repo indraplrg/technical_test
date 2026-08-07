@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 // Jurusan represents an academic department. One Jurusan has many Mahasiswa.
@@ -13,9 +11,8 @@ type Jurusan struct {
 	Fakultas    string `gorm:"size:100;not null" json:"fakultas"`
 	Jenjang     string `gorm:"size:50;not null" json:"jenjang"`
 
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (Jurusan) TableName() string {

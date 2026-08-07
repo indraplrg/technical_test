@@ -126,7 +126,7 @@ func (ctr *JurusanController) Update(c *gin.Context) {
 
 // Delete handles DELETE /api/v1/jurusan/:id.
 // @Summary Delete jurusan
-// @Description Delete a jurusan record (soft delete)
+// @Description Delete a jurusan record permanently (hard delete)
 // @Tags jurusan
 // @Produce json
 // @Param id path int true "Jurusan ID"

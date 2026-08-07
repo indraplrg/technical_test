@@ -238,7 +238,7 @@ Body sama dengan Create (semua field wajib).
 
 `DELETE /api/v1/jurusan/{id}`
 
-Melakukan **soft delete** (mengisi `deleted_at`).
+Melakukan **hard delete** (data jurusan dihapus permanen dari database).
 
 **Respons 200:**
 
@@ -415,7 +415,7 @@ Body sama dengan Create (semua field wajib). NIM tetap boleh memakai nilai yang 
 
 `DELETE /api/v1/mahasiswa/{id}`
 
-Melakukan **soft delete** (mengisi `deleted_at`). Record yang sudah dihapus tidak muncul di list/get, dan NIM-nya dapat dipakai kembali.
+Melakukan **hard delete** (data mahasiswa dihapus permanen dari database). NIM-nya dapat dipakai kembali.
 
 **Respons 200:**
 

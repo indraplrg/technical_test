@@ -191,7 +191,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a jurusan record (soft delete)",
+                "description": "Delete a jurusan record permanently (hard delete)",
                 "produces": [
                     "application/json"
                 ],
@@ -454,7 +454,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a mahasiswa record (soft delete)",
+                "description": "Delete a mahasiswa record permanently (hard delete)",
                 "produces": [
                     "application/json"
                 ],

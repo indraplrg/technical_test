@@ -8,7 +8,7 @@ built as a Senior Backend Engineer technical test.
 - **Go 1.24+**
 - **Gin Framework** – HTTP router / middleware
 - **PostgreSQL** – relational database
-- **GORM** – ORM with AutoMigrate and Soft Delete
+- **GORM** – ORM with AutoMigrate
 - **Swaggo** – Swagger / OpenAPI documentation
 - **Docker & Docker Compose** – containerization
 - **Minikube** – local Kubernetes deployment
@@ -24,7 +24,8 @@ built as a Senior Backend Engineer technical test.
 
 ### Additional Requirements
 
-- Soft Delete (`deleted_at`) + audit fields (`created_at`, `updated_at`)
+- Hard Delete (records are permanently removed) + audit fields (`created_at`, `updated_at`)
+- Rate limiting middleware (per-client token bucket, `RATE_LIMIT_*` env vars)
 - Request ID middleware (`X-Request-ID`)
 - CORS middleware
 - Recovery middleware with consistent JSON errors
@@ -71,7 +72,7 @@ k8s/                 # Kubernetes manifests
 
 ### Prerequisites
 
-- Go 1.24+
+- Go 1.26.5
 - PostgreSQL 14+ (or Docker)
 - [swag](https://github.com/swaggo/swag) for regenerating docs
 - (optional) Docker / Minikube / golangci-lint
@@ -112,46 +113,46 @@ Base path: `/api/v1`
 
 ### Health
 
-| Method | Path       | Description        |
-| ------ | ---------- | ------------------ |
-| GET    | `/health`  | Service health     |
-| GET    | `/swagger/*any` | Swagger UI    |
+| Method | Path            | Description    |
+| ------ | --------------- | -------------- |
+| GET    | `/health`       | Service health |
+| GET    | `/swagger/*any` | Swagger UI     |
 
 ### Jurusan
 
-| Method | Path                  | Description        |
-| ------ | --------------------- | ------------------ |
-| POST   | `/api/v1/jurusan`     | Create jurusan     |
-| GET    | `/api/v1/jurusan`     | List all jurusan   |
-| GET    | `/api/v1/jurusan/:id` | Get jurusan by id  |
-| PUT    | `/api/v1/jurusan/:id` | Update jurusan     |
-| DELETE | `/api/v1/jurusan/:id` | Delete jurusan     |
+| Method | Path                  | Description       |
+| ------ | --------------------- | ----------------- |
+| POST   | `/api/v1/jurusan`     | Create jurusan    |
+| GET    | `/api/v1/jurusan`     | List all jurusan  |
+| GET    | `/api/v1/jurusan/:id` | Get jurusan by id |
+| PUT    | `/api/v1/jurusan/:id` | Update jurusan    |
+| DELETE | `/api/v1/jurusan/:id` | Delete jurusan    |
 
 ### Mahasiswa
 
-| Method | Path                          | Description                          |
-| ------ | ----------------------------- | ------------------------------------ |
-| POST   | `/api/v1/mahasiswa`           | Create mahasiswa                     |
-| GET    | `/api/v1/mahasiswa`           | List with search/filter/sort/paginate |
-| GET    | `/api/v1/mahasiswa/:id`       | Get mahasiswa by id                  |
-| PUT    | `/api/v1/mahasiswa/:id`       | Update mahasiswa                     |
-| DELETE | `/api/v1/mahasiswa/:id`       | Delete mahasiswa (soft)              |
-| GET    | `/api/v1/mahasiswa/export/csv`   | Export CSV                        |
-| GET    | `/api/v1/mahasiswa/export/excel` | Export Excel                      |
-| GET    | `/api/v1/mahasiswa/export/pdf`   | Export PDF                        |
-| GET    | `/api/v1/mahasiswa/export/json`  | Export JSON                       |
+| Method | Path                             | Description                           |
+| ------ | -------------------------------- | ------------------------------------- |
+| POST   | `/api/v1/mahasiswa`              | Create mahasiswa                      |
+| GET    | `/api/v1/mahasiswa`              | List with search/filter/sort/paginate |
+| GET    | `/api/v1/mahasiswa/:id`          | Get mahasiswa by id                   |
+| PUT    | `/api/v1/mahasiswa/:id`          | Update mahasiswa                      |
+| DELETE | `/api/v1/mahasiswa/:id`          | Delete mahasiswa (soft)               |
+| GET    | `/api/v1/mahasiswa/export/csv`   | Export CSV                            |
+| GET    | `/api/v1/mahasiswa/export/excel` | Export Excel                          |
+| GET    | `/api/v1/mahasiswa/export/pdf`   | Export PDF                            |
+| GET    | `/api/v1/mahasiswa/export/json`  | Export JSON                           |
 
 ### List query parameters (Mahasiswa)
 
-| Param        | Type   | Description                                 |
-| ------------ | ------ | ------------------------------------------- |
-| `search`     | string | partial match on `nama` or `nim`            |
-| `nim`        | string | exact match on `nim`                        |
-| `id_jurusan` | int    | filter by department                        |
+| Param        | Type   | Description                                          |
+| ------------ | ------ | ---------------------------------------------------- |
+| `search`     | string | partial match on `nama` or `nim`                     |
+| `nim`        | string | exact match on `nim`                                 |
+| `id_jurusan` | int    | filter by department                                 |
 | `sort_by`    | string | `nama`, `umur`, `nim`, `tanggal_lahir`, `created_at` |
-| `sort_order` | string | `asc` / `desc`                              |
-| `page`       | int    | page number (default 1)                     |
-| `limit`      | int    | page size (default 10, max 100)             |
+| `sort_order` | string | `asc` / `desc`                                       |
+| `page`       | int    | page number (default 1)                              |
+| `limit`      | int    | page size (default 10, max 100)                      |
 
 ### Example requests
 
@@ -220,14 +221,14 @@ Error:
 
 ### HTTP status codes
 
-| Code | Meaning                                   |
-| ---- | ----------------------------------------- |
-| 200  | OK / updated / deleted                    |
-| 201  | Created                                   |
-| 400  | Bad request / validation error            |
-| 404  | Resource not found                        |
+| Code | Meaning                                          |
+| ---- | ------------------------------------------------ |
+| 200  | OK / updated / deleted                           |
+| 201  | Created                                          |
+| 400  | Bad request / validation error                   |
+| 404  | Resource not found                               |
 | 409  | Conflict (duplicate nim / name, related records) |
-| 500  | Internal server error                     |
+| 500  | Internal server error                            |
 
 ## Validation Rules
 
