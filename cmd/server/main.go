@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"log"
 	"log/slog"
 	"net/http"
@@ -39,6 +40,9 @@ import (
 // @description Insert the token into the Authorization header
 
 func main() {
+	migrateFlag := flag.Bool("migrate", false, "run auto migrations and seed, then exit")
+	flag.Parse()
+
 	cfg := config.Load()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
@@ -55,6 +59,11 @@ func main() {
 	}
 	if err := database.Seed(db); err != nil {
 		log.Fatalf("failed to seed data: %v", err)
+	}
+
+	if *migrateFlag {
+		slog.Info("migrations and seed completed")
+		return
 	}
 
 	router := routes.Setup(cfg, db)
