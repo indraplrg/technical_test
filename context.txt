@@ -1,0 +1,243 @@
+Act as a Senior Backend Engineer specializing in Golang.
+
+I want to build a production-ready backend REST API for a technical test.
+
+## Tech Stack
+
+- Go 1.24+
+- Gin Framework
+- PostgreSQL
+- GORM
+- Swagger (Swaggo)
+- Docker & Docker Compose
+- Minikube Deployment
+- MVC Architecture
+- REST API
+- Git Version Control
+
+## Project Requirements
+
+The application is a Student Management System.
+
+There are two tables.
+
+### mahasiswa
+
+- id
+- nama
+- umur
+- nim
+- tanggal_lahir
+- alamat
+- id_jurusan
+
+### jurusan
+
+- id_jurusan
+- nama_jurusan
+- fakultas
+- jenjang
+
+Relationship
+
+One Jurusan has many Mahasiswa.
+
+Every Mahasiswa belongs to one Jurusan.
+
+---
+
+## Functional Requirements
+
+CRUD Jurusan
+
+- Create
+- Get All
+- Get By ID
+- Update
+- Delete
+
+CRUD Mahasiswa
+
+- Create
+- Get All
+- Get By ID
+- Update
+- Delete
+
+Search Mahasiswa
+
+Filter
+
+Sorting
+
+Pagination
+
+Validation
+
+Return proper HTTP Status Code
+
+Consistent JSON Response
+
+Swagger Documentation
+
+---
+
+## Validation
+
+Mahasiswa
+
+- nama required
+- umur required
+- umur > 0
+- nim required
+- nim unique
+- tanggal_lahir required
+- alamat required
+- jurusan must exist
+
+Jurusan
+
+- nama_jurusan required
+- fakultas required
+- jenjang required
+
+---
+
+## API Response Format
+
+Success
+
+{
+    "success": true,
+    "message": "...",
+    "data": ...
+}
+
+Error
+
+{
+    "success": false,
+    "message": "...",
+    "errors": ...
+}
+
+---
+
+## Folder Structure
+
+Use MVC architecture.
+
+I expect folders like
+
+cmd/
+internal/
+    config/
+    controller/
+    service/
+    repository/
+    model/
+    dto/
+    middleware/
+    validator/
+    routes/
+    helper/
+    response/
+    database/
+docs/
+migrations/
+scripts/
+
+Keep controller thin.
+
+Business logic must be inside service.
+
+Database query only inside repository.
+
+---
+
+## Requirements
+
+Dependency Injection
+
+Environment Variables
+
+Configuration Loader
+
+Database Migration
+
+Graceful Shutdown
+
+Structured Logging
+
+Error Handling
+
+Request Validation
+
+Centralized Response Helper
+
+Transaction Support if needed
+
+Context propagation
+
+Swagger annotations
+
+---
+
+## Docker
+
+Create
+
+Dockerfile
+
+docker-compose.yml
+
+Services
+
+- backend
+- postgres
+
+---
+
+## Coding Style
+
+Use idiomatic Go.
+
+Follow SOLID principles.
+
+Avoid duplicated code.
+
+Use interfaces where appropriate.
+
+Keep every file under approximately 200 lines if possible.
+
+Write clean and maintainable code.
+
+---
+
+## Git Workflow
+
+Build this project incrementally.
+
+After every completed feature, suggest a git commit message using Conventional Commits.
+
+Example
+
+feat(student): implement create mahasiswa endpoint
+
+---
+
+## Development Rules
+
+Do NOT generate the entire project in one response.
+
+Work feature by feature.
+
+Always explain why a design decision is made.
+
+If a better architecture exists, recommend it before implementing.
+
+Never skip best practices.
+
+Treat this project as if it will be deployed into production.
+
+Wait for my confirmation before moving to the next step.

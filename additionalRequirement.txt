@@ -1,0 +1,45 @@
+Additional Requirements
+
+- UUID as public identifier (optional if company prefers integer ID)
+- Soft Delete
+- Audit Fields
+
+created_at
+updated_at
+deleted_at
+
+- Request ID Middleware
+- CORS Middleware
+- Recovery Middleware
+- Health Check Endpoint
+
+GET /health
+
+- API Versioning
+
+/api/v1/
+
+- Configuration using .env
+
+- Seed Data
+
+- Makefile
+
+commands
+
+make run
+make migrate
+make swagger
+make test
+
+- Linter ready
+
+golangci-lint
+
+- Unit Test ready architecture
+
+repository and service should be testable
+
+- API follows RESTful naming convention
+
+- Use UTC timezone internally

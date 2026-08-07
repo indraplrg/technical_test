@@ -1,0 +1,39 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+main
+server
+
+# Test binary
+*.test
+*.out
+
+# Env
+.env
+
+# Go workspace
+go.work
+go.work.sum
+
+# Swagger generated
+docs/swagger/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Temporary
+tmp/
