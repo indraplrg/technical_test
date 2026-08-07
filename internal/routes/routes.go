@@ -32,6 +32,16 @@ func Setup(cfg *config.Config, db *gorm.DB) *gin.Engine {
 			jurusanRoutes.PUT("/:id", jurusanController.Update)
 			jurusanRoutes.DELETE("/:id", jurusanController.Delete)
 		}
+
+		mahasiswaController := newMahasiswaController(db)
+		mahasiswaRoutes := v1.Group("/mahasiswa")
+		{
+			mahasiswaRoutes.GET("", mahasiswaController.GetAll)
+			mahasiswaRoutes.GET("/:id", mahasiswaController.GetByID)
+			mahasiswaRoutes.POST("", mahasiswaController.Create)
+			mahasiswaRoutes.PUT("/:id", mahasiswaController.Update)
+			mahasiswaRoutes.DELETE("/:id", mahasiswaController.Delete)
+		}
 	}
 
 	return router
@@ -46,4 +56,11 @@ func newJurusanController(db *gorm.DB) *controller.JurusanController {
 	mahasiswaRepo := repository.NewMahasiswaRepository(db)
 	jurusanService := service.NewJurusanService(jurusanRepo, mahasiswaRepo)
 	return controller.NewJurusanController(jurusanService)
+}
+
+func newMahasiswaController(db *gorm.DB) *controller.MahasiswaController {
+	jurusanRepo := repository.NewJurusanRepository(db)
+	mahasiswaRepo := repository.NewMahasiswaRepository(db)
+	mahasiswaService := service.NewMahasiswaService(mahasiswaRepo, jurusanRepo)
+	return controller.NewMahasiswaController(mahasiswaService)
 }

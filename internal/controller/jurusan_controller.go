@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -100,13 +99,4 @@ func (ctr *JurusanController) Delete(c *gin.Context) {
 		return
 	}
 	response.Success(c, http.StatusOK, "jurusan deleted successfully", nil)
-}
-
-// parseID extracts and converts the ":id" path parameter to uint.
-func parseID(c *gin.Context) (uint, error) {
-	value, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		return 0, err
-	}
-	return uint(value), nil
 }
