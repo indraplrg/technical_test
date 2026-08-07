@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/indraplrg/technical_test/internal/model"
 	"gorm.io/gorm"
@@ -20,5 +19,3 @@ type JurusanRepository interface {
 	ExistsByID(ctx context.Context, id uint) (bool, error)
 	ExistsByName(ctx context.Context, name string, excludeID uint) (bool, error)
 }
-
-var ErrDeleteHasChildren = errors.New("record has related mahasiswa records")
