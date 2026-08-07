@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuri/excelize/v2"
 
+	"github.com/indraplrg/technical_test/internal/response"
 	"github.com/indraplrg/technical_test/internal/service"
 )
 
@@ -53,6 +55,59 @@ func (ctr *ExportController) ExportCSV(c *gin.Context) {
 			strconv.FormatUint(uint64(m.IDJurusan), 10),
 			jurusan,
 		})
+	}
+}
+
+// ExportExcel handles GET /api/v1/mahasiswa/export/excel.
+func (ctr *ExportController) ExportExcel(c *gin.Context) {
+	list, err := ctr.service.ExportAll(c.Request.Context(), ctr.buildQuery(c))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+
+	sheetName := "Mahasiswa"
+	file := excelize.NewFile()
+	defer file.Close()
+
+	sheet := file.GetSheetName(file.GetActiveSheetIndex())
+	file.SetSheetName(sheet, sheetName)
+
+	headers := []interface{}{"ID", "Nama", "Umur", "NIM", "Tanggal Lahir", "Alamat", "ID Jurusan", "Jurusan"}
+	for i, header := range headers {
+		cell, _ := excelize.CoordinatesToCellName(i+1, 1)
+		_ = file.SetCellValue(sheetName, cell, header)
+	}
+
+	for idx, m := range list {
+		row := idx + 2
+		jurusan := ""
+		if m.Jurusan != nil {
+			jurusan = m.Jurusan.NamaJurusan
+		}
+		values := []interface{}{
+			m.ID,
+			m.Nama,
+			m.Umur,
+			m.NIM,
+			m.TanggalLahir,
+			m.Alamat,
+			m.IDJurusan,
+			jurusan,
+		}
+		for i, value := range values {
+			cell, _ := excelize.CoordinatesToCellName(i+1, row)
+			_ = file.SetCellValue(sheetName, cell, value)
+		}
+	}
+
+	filename := "mahasiswa_" + time.Now().UTC().Format("20060102150405") + ".xlsx"
+	c.Header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	c.Header("Content-Disposition", "attachment; filename="+filename)
+	c.Writer.WriteHeader(http.StatusOK)
+
+	if _, err := file.WriteTo(c.Writer); err != nil {
+		response.Error(c, http.StatusInternalServerError, "failed to generate excel file")
 	}
 }
 
