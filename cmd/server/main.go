@@ -15,7 +15,28 @@ import (
 	"github.com/indraplrg/technical_test/internal/database"
 	"github.com/indraplrg/technical_test/internal/model"
 	"github.com/indraplrg/technical_test/internal/routes"
+
+	_ "github.com/indraplrg/technical_test/docs" // swagger generated docs
 )
+
+// @title Student Management API
+// @version 1.0
+// @description REST API for managing Jurusan (departments) and Mahasiswa (students), built with Go, Gin, GORM and PostgreSQL.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.email support@example.com
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @BasePath /api/v1
+
+// @securityDefinitions.apikey
+// @in header
+// @name Authorization
+// @description Insert the token into the Authorization header
 
 func main() {
 	cfg := config.Load()

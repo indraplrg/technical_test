@@ -23,6 +23,17 @@ func NewMahasiswaController(service service.MahasiswaService) *MahasiswaControll
 }
 
 // Create handles POST /api/v1/mahasiswa.
+// @Summary Create a new mahasiswa
+// @Description Create a new mahasiswa record
+// @Tags mahasiswa
+// @Accept json
+// @Produce json
+// @Param body body dto.MahasiswaRequest true "Mahasiswa payload"
+// @Success 201 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Failure 409 {object} response.Result
+// @Router /mahasiswa [post]
 func (ctr *MahasiswaController) Create(c *gin.Context) {
 	var req dto.MahasiswaRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -40,6 +51,20 @@ func (ctr *MahasiswaController) Create(c *gin.Context) {
 
 // GetAll handles GET /api/v1/mahasiswa with search, filter, sort
 // and pagination support.
+// @Summary Get all mahasiswa
+// @Description Returns a paginated list of mahasiswa with search, filter and sort
+// @Tags mahasiswa
+// @Produce json
+// @Param search query string false "Search by nama or nim"
+// @Param nim query string false "Filter by exact nim"
+// @Param id_jurusan query int false "Filter by jurusan id"
+// @Param sort_by query string false "Sort field: nama, umur, nim, tanggal_lahir, created_at"
+// @Param sort_order query string false "Sort direction: asc or desc"
+// @Param page query int false "Page number"
+// @Param limit query int false "Items per page"
+// @Success 200 {object} response.Result
+// @Failure 500 {object} response.Result
+// @Router /mahasiswa [get]
 func (ctr *MahasiswaController) GetAll(c *gin.Context) {
 	query := service.MahasiswaQuery{
 		Search:    c.Query("search"),
@@ -68,6 +93,15 @@ func (ctr *MahasiswaController) GetAll(c *gin.Context) {
 }
 
 // GetByID handles GET /api/v1/mahasiswa/:id.
+// @Summary Get mahasiswa by id
+// @Description Returns a single mahasiswa record
+// @Tags mahasiswa
+// @Produce json
+// @Param id path int true "Mahasiswa ID"
+// @Success 200 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Router /mahasiswa/{id} [get]
 func (ctr *MahasiswaController) GetByID(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -84,6 +118,18 @@ func (ctr *MahasiswaController) GetByID(c *gin.Context) {
 }
 
 // Update handles PUT /api/v1/mahasiswa/:id.
+// @Summary Update mahasiswa
+// @Description Update an existing mahasiswa record
+// @Tags mahasiswa
+// @Accept json
+// @Produce json
+// @Param id path int true "Mahasiswa ID"
+// @Param body body dto.MahasiswaRequest true "Mahasiswa payload"
+// @Success 200 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Failure 409 {object} response.Result
+// @Router /mahasiswa/{id} [put]
 func (ctr *MahasiswaController) Update(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -106,6 +152,15 @@ func (ctr *MahasiswaController) Update(c *gin.Context) {
 }
 
 // Delete handles DELETE /api/v1/mahasiswa/:id.
+// @Summary Delete mahasiswa
+// @Description Delete a mahasiswa record (soft delete)
+// @Tags mahasiswa
+// @Produce json
+// @Param id path int true "Mahasiswa ID"
+// @Success 200 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Router /mahasiswa/{id} [delete]
 func (ctr *MahasiswaController) Delete(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {

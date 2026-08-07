@@ -23,6 +23,16 @@ func NewJurusanController(service service.JurusanService) *JurusanController {
 }
 
 // Create handles POST /api/v1/jurusan.
+// @Summary Create a new jurusan
+// @Description Create a new jurusan record
+// @Tags jurusan
+// @Accept json
+// @Produce json
+// @Param body body dto.JurusanRequest true "Jurusan payload"
+// @Success 201 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 409 {object} response.Result
+// @Router /jurusan [post]
 func (ctr *JurusanController) Create(c *gin.Context) {
 	var req dto.JurusanRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -39,6 +49,13 @@ func (ctr *JurusanController) Create(c *gin.Context) {
 }
 
 // GetAll handles GET /api/v1/jurusan.
+// @Summary Get all jurusan
+// @Description Returns a list of all jurusan records
+// @Tags jurusan
+// @Produce json
+// @Success 200 {object} response.Result
+// @Failure 500 {object} response.Result
+// @Router /jurusan [get]
 func (ctr *JurusanController) GetAll(c *gin.Context) {
 	jurusanList, err := ctr.service.GetAll(c.Request.Context())
 	if err != nil {
@@ -49,6 +66,15 @@ func (ctr *JurusanController) GetAll(c *gin.Context) {
 }
 
 // GetByID handles GET /api/v1/jurusan/:id.
+// @Summary Get jurusan by id
+// @Description Returns a single jurusan record
+// @Tags jurusan
+// @Produce json
+// @Param id path int true "Jurusan ID"
+// @Success 200 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Router /jurusan/{id} [get]
 func (ctr *JurusanController) GetByID(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -65,6 +91,18 @@ func (ctr *JurusanController) GetByID(c *gin.Context) {
 }
 
 // Update handles PUT /api/v1/jurusan/:id.
+// @Summary Update jurusan
+// @Description Update an existing jurusan record
+// @Tags jurusan
+// @Accept json
+// @Produce json
+// @Param id path int true "Jurusan ID"
+// @Param body body dto.JurusanRequest true "Jurusan payload"
+// @Success 200 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Failure 409 {object} response.Result
+// @Router /jurusan/{id} [put]
 func (ctr *JurusanController) Update(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {
@@ -87,6 +125,16 @@ func (ctr *JurusanController) Update(c *gin.Context) {
 }
 
 // Delete handles DELETE /api/v1/jurusan/:id.
+// @Summary Delete jurusan
+// @Description Delete a jurusan record (soft delete)
+// @Tags jurusan
+// @Produce json
+// @Param id path int true "Jurusan ID"
+// @Success 200 {object} response.Result
+// @Failure 400 {object} response.Result
+// @Failure 404 {object} response.Result
+// @Failure 409 {object} response.Result
+// @Router /jurusan/{id} [delete]
 func (ctr *JurusanController) Delete(c *gin.Context) {
 	id, err := parseID(c)
 	if err != nil {

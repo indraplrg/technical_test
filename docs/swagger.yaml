@@ -1,0 +1,378 @@
+basePath: /api/v1
+definitions:
+  dto.JurusanRequest:
+    properties:
+      fakultas:
+        type: string
+      jenjang:
+        type: string
+      nama_jurusan:
+        type: string
+    required:
+    - fakultas
+    - jenjang
+    - nama_jurusan
+    type: object
+  dto.MahasiswaRequest:
+    properties:
+      alamat:
+        type: string
+      id_jurusan:
+        type: integer
+      nama:
+        type: string
+      nim:
+        type: string
+      tanggal_lahir:
+        type: string
+      umur:
+        type: integer
+    required:
+    - alamat
+    - id_jurusan
+    - nama
+    - nim
+    - tanggal_lahir
+    - umur
+    type: object
+  response.Result:
+    properties:
+      data: {}
+      errors: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: REST API for managing Jurusan (departments) and Mahasiswa (students),
+    built with Go, Gin, GORM and PostgreSQL.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Student Management API
+  version: "1.0"
+paths:
+  /jurusan:
+    get:
+      description: Returns a list of all jurusan records
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Get all jurusan
+      tags:
+      - jurusan
+    post:
+      consumes:
+      - application/json
+      description: Create a new jurusan record
+      parameters:
+      - description: Jurusan payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.JurusanRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Create a new jurusan
+      tags:
+      - jurusan
+  /jurusan/{id}:
+    delete:
+      description: Delete a jurusan record (soft delete)
+      parameters:
+      - description: Jurusan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Delete jurusan
+      tags:
+      - jurusan
+    get:
+      description: Returns a single jurusan record
+      parameters:
+      - description: Jurusan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Get jurusan by id
+      tags:
+      - jurusan
+    put:
+      consumes:
+      - application/json
+      description: Update an existing jurusan record
+      parameters:
+      - description: Jurusan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Jurusan payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.JurusanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Update jurusan
+      tags:
+      - jurusan
+  /mahasiswa:
+    get:
+      description: Returns a paginated list of mahasiswa with search, filter and sort
+      parameters:
+      - description: Search by nama or nim
+        in: query
+        name: search
+        type: string
+      - description: Filter by exact nim
+        in: query
+        name: nim
+        type: string
+      - description: Filter by jurusan id
+        in: query
+        name: id_jurusan
+        type: integer
+      - description: 'Sort field: nama, umur, nim, tanggal_lahir, created_at'
+        in: query
+        name: sort_by
+        type: string
+      - description: 'Sort direction: asc or desc'
+        in: query
+        name: sort_order
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Get all mahasiswa
+      tags:
+      - mahasiswa
+    post:
+      consumes:
+      - application/json
+      description: Create a new mahasiswa record
+      parameters:
+      - description: Mahasiswa payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.MahasiswaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Create a new mahasiswa
+      tags:
+      - mahasiswa
+  /mahasiswa/{id}:
+    delete:
+      description: Delete a mahasiswa record (soft delete)
+      parameters:
+      - description: Mahasiswa ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Delete mahasiswa
+      tags:
+      - mahasiswa
+    get:
+      description: Returns a single mahasiswa record
+      parameters:
+      - description: Mahasiswa ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Get mahasiswa by id
+      tags:
+      - mahasiswa
+    put:
+      consumes:
+      - application/json
+      description: Update an existing mahasiswa record
+      parameters:
+      - description: Mahasiswa ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Mahasiswa payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.MahasiswaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Result'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Result'
+      summary: Update mahasiswa
+      tags:
+      - mahasiswa
+securityDefinitions:
+  "":
+    description: Insert the token into the Authorization header
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

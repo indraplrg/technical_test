@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
 
 	"github.com/indraplrg/technical_test/internal/config"
@@ -20,6 +22,7 @@ func Setup(cfg *config.Config, db *gorm.DB) *gin.Engine {
 	router.Use(gin.Logger(), middleware.Recovery(), middleware.RequestID(), middleware.CORS(cfg.AllowedOrigin))
 
 	router.GET("/health", health)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := router.Group("/api/v1")
 	{
