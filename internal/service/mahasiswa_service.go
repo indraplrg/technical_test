@@ -26,4 +26,5 @@ type MahasiswaService interface {
 	GetByID(ctx context.Context, id uint) (*model.Mahasiswa, error)
 	Update(ctx context.Context, id uint, req dto.MahasiswaRequest) (*model.Mahasiswa, error)
 	Delete(ctx context.Context, id uint) error
+	ExportAll(ctx context.Context, query MahasiswaQuery) ([]model.Mahasiswa, error)
 }

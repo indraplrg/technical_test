@@ -124,6 +124,16 @@ func (s *mahasiswaService) Delete(ctx context.Context, id uint) error {
 	return s.mahasiswaRepo.Delete(ctx, id)
 }
 
+// ExportAll returns all mahasiswa matching the query filters, ordered by nama.
+func (s *mahasiswaService) ExportAll(ctx context.Context, query MahasiswaQuery) ([]model.Mahasiswa, error) {
+	filter := repository.MahasiswaFilter{
+		Search:    query.Search,
+		NIM:       query.NIM,
+		IDJurusan: query.IDJurusan,
+	}
+	return s.mahasiswaRepo.FindAllExport(ctx, filter)
+}
+
 func (s *mahasiswaService) ensureJurusanExists(ctx context.Context, id uint) error {
 	exists, err := s.jurusanRepo.ExistsByID(ctx, id)
 	if err != nil {

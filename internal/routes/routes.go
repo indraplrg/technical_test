@@ -44,6 +44,7 @@ func Setup(cfg *config.Config, db *gorm.DB) *gin.Engine {
 			mahasiswaRoutes.POST("", mahasiswaController.Create)
 			mahasiswaRoutes.PUT("/:id", mahasiswaController.Update)
 			mahasiswaRoutes.DELETE("/:id", mahasiswaController.Delete)
+			mahasiswaRoutes.GET("/export/csv", newExportController(db).ExportCSV)
 		}
 	}
 
@@ -66,4 +67,11 @@ func newMahasiswaController(db *gorm.DB) *controller.MahasiswaController {
 	mahasiswaRepo := repository.NewMahasiswaRepository(db)
 	mahasiswaService := service.NewMahasiswaService(mahasiswaRepo, jurusanRepo)
 	return controller.NewMahasiswaController(mahasiswaService)
+}
+
+func newExportController(db *gorm.DB) *controller.ExportController {
+	jurusanRepo := repository.NewJurusanRepository(db)
+	mahasiswaRepo := repository.NewMahasiswaRepository(db)
+	mahasiswaService := service.NewMahasiswaService(mahasiswaRepo, jurusanRepo)
+	return controller.NewExportController(mahasiswaService)
 }
