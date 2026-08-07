@@ -46,6 +46,7 @@ func Setup(cfg *config.Config, db *gorm.DB) *gin.Engine {
 			mahasiswaRoutes.DELETE("/:id", mahasiswaController.Delete)
 			mahasiswaRoutes.GET("/export/csv", newExportController(db).ExportCSV)
 			mahasiswaRoutes.GET("/export/excel", newExportController(db).ExportExcel)
+			mahasiswaRoutes.GET("/export/pdf", newExportController(db).ExportPDF)
 		}
 	}
 

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-pdf/fpdf"
 	"github.com/xuri/excelize/v2"
 
 	"github.com/indraplrg/technical_test/internal/response"
@@ -109,6 +110,68 @@ func (ctr *ExportController) ExportExcel(c *gin.Context) {
 	if _, err := file.WriteTo(c.Writer); err != nil {
 		response.Error(c, http.StatusInternalServerError, "failed to generate excel file")
 	}
+}
+
+// ExportPDF handles GET /api/v1/mahasiswa/export/pdf.
+func (ctr *ExportController) ExportPDF(c *gin.Context) {
+	list, err := ctr.service.ExportAll(c.Request.Context(), ctr.buildQuery(c))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+
+	pdf := fpdf.New("L", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 16)
+	pdf.CellFormat(0, 10, "Data Mahasiswa", "0", 1, "C", false, 0, "")
+	pdf.Ln(4)
+
+	headers := []string{"ID", "Nama", "Umur", "NIM", "Tgl Lahir", "Alamat", "Jurusan"}
+	widths := []float64{14, 45, 12, 18, 24, 70, 40}
+
+	pdf.SetFont("Arial", "B", 9)
+	for i, header := range headers {
+		pdf.CellFormat(widths[i], 8, header, "1", 0, "C", false, 0, "")
+	}
+	pdf.Ln(-1)
+
+	pdf.SetFont("Arial", "", 9)
+	for _, m := range list {
+		jurusan := ""
+		if m.Jurusan != nil {
+			jurusan = m.Jurusan.NamaJurusan
+		}
+		row := []string{
+			strconv.Itoa(int(m.ID)),
+			m.Nama,
+			strconv.Itoa(m.Umur),
+			m.NIM,
+			m.TanggalLahir,
+			truncate(m.Alamat, 70),
+			jurusan,
+		}
+		for i, cell := range row {
+			pdf.CellFormat(widths[i], 8, cell, "1", 0, "L", false, 0, "")
+		}
+		pdf.Ln(-1)
+	}
+
+	filename := "mahasiswa_" + time.Now().UTC().Format("20060102150405") + ".pdf"
+	c.Header("Content-Type", "application/pdf")
+	c.Header("Content-Disposition", "attachment; filename="+filename)
+	c.Writer.WriteHeader(http.StatusOK)
+
+	if err := pdf.Output(c.Writer); err != nil {
+		response.Error(c, http.StatusInternalServerError, "failed to generate pdf file")
+	}
+}
+
+func truncate(value string, max int) string {
+	runes := []rune(value)
+	if len(runes) <= max {
+		return value
+	}
+	return string(runes[:max]) + "..."
 }
 
 // buildQuery reads export filter query parameters.
